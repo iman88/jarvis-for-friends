@@ -1,0 +1,18 @@
+# Personal data: CV, profile, applications. Never commit.
+me/
+
+# Playwright MCP snapshots, screenshots, console logs (contain job and profile data)
+.playwright-mcp/
+
+# Claude Code per-machine settings (may hold secrets)
+.claude/settings.local.json
+
+# Stray CVs dropped in the wrong place
+*.pdf
+*.docx
+*.doc
+
+__pycache__/
+.idea/
+.vscode/
+*.iml
