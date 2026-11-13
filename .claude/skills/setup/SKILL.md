@@ -34,14 +34,14 @@ Don't stop at the first failure. Work out why it failed (permissions, missing pr
 ## Step B: Node.js (the browser tool runs on it)
 
 Run `node -v`.
-- Version 18 or higher: ✅, go on.
+- Version 22 or higher: ✅, go on. Older than 22 counts as old: Node 18 and 20 no longer get security fixes.
 - **Windows, missing or old:** install it yourself with winget, which comes with Windows 10/11:
   `winget install --id OpenJS.NodeJS.LTS --exact --silent --accept-package-agreements --accept-source-agreements`
   Tell them first: "A Windows permission window will pop up. Click **Yes**." When it finishes, they must **close Claude Code and open it again** in the same folder (`/exit`, then `claude`), because only new windows see Node. Then re-check.
   If `winget` isn't found or fails: ask them to open https://nodejs.org, download the **LTS** Windows installer, run it and click Next with the defaults. Then restart Claude Code.
 - **Mac, missing or old:** ask them to open https://nodejs.org, download the **LTS** macOS installer (.pkg) and click Continue through it. Then restart Claude Code.
 - **Workarounds if that fails:**
-  - *Windows, no admin rights or the installer is blocked:* use the portable Node, which needs no install and no admin rights. Download the Windows x64 `.zip` of the current LTS from https://nodejs.org/dist/latest-v24.x/ (check the actual file name on that page) with `Invoke-WebRequest`. Unzip it to `$env:LOCALAPPDATA\node` with `Expand-Archive`, and add that folder to the **user** PATH: `[Environment]::SetEnvironmentVariable("Path", $env:Path + ";<folder>", "User")`. Restart Claude Code.
+  - *Windows, no admin rights or the installer is blocked:* use the portable Node, which needs no install and no admin rights. Download the Windows x64 `.zip` of the current LTS from https://nodejs.org/dist/latest-v26.x/ (check the actual file name on that page) with `Invoke-WebRequest`. Unzip it to `$env:LOCALAPPDATA\node` with `Expand-Archive`, and add that folder to the **user** PATH: `[Environment]::SetEnvironmentVariable("Path", $env:Path + ";<folder>", "User")`. Restart Claude Code.
   - *Download blocked or very slow:* check whether they're on a company VPN or proxy. Try again off the VPN, or have them download the file in their browser and tell you where it is.
   - *Node installed but `node` still not found:* the PATH hasn't refreshed. Make sure they restarted Claude Code, not just the chat. If needed, use the full path (`C:\Program Files\nodejs\node.exe`) and the full `npx.cmd` path in the MCP command.
 - Windows, error "running scripts is disabled on this system": run
@@ -51,20 +51,20 @@ Run `node -v`.
 
 1. **Pick the browser before the first try.** Playwright MCP uses the browser already installed, and by default that's Chrome.
    - Windows without Chrome (`Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe"` is false, and the `(x86)` path too): switch to Edge, which every Windows has:
-     `claude mcp add playwright -s local -- npx @playwright/mcp@latest --browser msedge`
+     `claude mcp add playwright -s local -- npx @playwright/mcp@0.0.85 --browser msedge`
      This local setting overrides the project's `.mcp.json` for this computer only.
    - Mac without Chrome (`ls "/Applications/Google Chrome.app"` fails): ask them to install Chrome from https://www.google.com/chrome, or use Edge if they have it, with `--browser msedge`.
-2. Pre-download the server once, so the first start doesn't time out: `npx -y @playwright/mcp@latest --help`.
+2. Pre-download the server once, so the first start doesn't time out: `npx -y @playwright/mcp@0.0.85 --help`.
 3. Restart Claude Code (`/exit`, then `claude`). If it asks to use the **playwright** MCP server, they answer **yes**.
 4. Test: check that the `mcp__playwright__*` tools are available, then `browser_navigate` to `https://www.linkedin.com`. A browser window should open. ✅
 5. Not working? Ask them to type `/mcp` and read you the status next to **playwright**, then fix in this order, restarting Claude Code after each fix:
    - **Not listed / rejected:** they declined the project server. Add it locally (the command from 1, with `--browser msedge` or without the flag for Chrome).
    - **Failed, on Windows:** wrap npx with cmd:
-     `claude mcp remove playwright -s local` then `claude mcp add playwright -s local -- cmd /c npx @playwright/mcp@latest --browser msedge`
+     `claude mcp remove playwright -s local` then `claude mcp add playwright -s local -- cmd /c npx @playwright/mcp@0.0.85 --browser msedge`
    - **Error says the browser isn't found:** switch browser (`--browser msedge` or `--browser chrome`).
    - **Antivirus blocking** (EPERM, access denied, the window opens and closes): tell them plainly, and walk them through allowing Node.js in the antivirus. Bitdefender in particular blocks it.
    - If `claude mcp add` says the name already exists, run `claude mcp remove playwright -s local` first.
-   - **`npx` itself fails** (network or cache errors): install it once globally with `npm install -g @playwright/mcp@latest`, then add the server with the installed command instead of npx: `claude mcp add playwright -s local -- playwright-mcp --browser msedge`. On Windows, if that fails, wrap it: `cmd /c playwright-mcp --browser msedge`.
+   - **`npx` itself fails** (network or cache errors): install it once globally with `npm install -g @playwright/mcp@0.0.85`, then add the server with the installed command instead of npx: `claude mcp add playwright -s local -- playwright-mcp --browser msedge`. On Windows, if that fails, wrap it: `cmd /c playwright-mcp --browser msedge`.
    - **Neither Chrome nor Edge works:** install Chrome. On Windows: `winget install --id Google.Chrome --exact --silent --accept-package-agreements --accept-source-agreements`. On Mac: the download from google.com/chrome. Then use `--browser chrome`.
    - **"Browser is already in use" / profile locked:** another Jarvis window or a crashed browser holds the profile. Ask them to close other Claude Code windows, or close leftover browser windows that Jarvis opened. As a last resort, add `--isolated`, but explain that they'll then need to log in to LinkedIn each session.
    - **Window opens but LinkedIn shows a security check or captcha:** that's LinkedIn being careful, not a failure. Ask them to complete it in the window themselves.

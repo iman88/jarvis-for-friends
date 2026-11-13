@@ -73,12 +73,12 @@ Free to use, share and adapt under [CC BY 4.0](LICENSE). If you reuse it, please
 ## For the maintainer: 🔄 Maintenance & planned updates
 
 > You don't need this section to use Jarvis. It is the maintainer's checklist: what this kit depends on and
-> when each part needs a look. Checked on 2026-11-12.
+> when each part needs a look. Checked on 2026-11-13.
 
 | Component | Current version | End of life / event | Action needed | Urgency |
 |---|---|---|---|---|
-| Playwright MCP (the browser tool) | `@playwright/mcp@latest` in `.mcp.json` (0.0.85 on 2026-11-12) | Pre-1.0 and released often; `@latest` gives every friend whatever came out that day | Pin a version you have tested, and move it up after a test run | Now |
-| Node.js minimum | The setup wizard accepts Node 18+ | Node 18 support ended Apr 2025, Node 20 ended Apr 2026 | Require Node 22+ in the setup skill (winget's `OpenJS.NodeJS.LTS` already installs a current LTS) | Now |
+| Playwright MCP (the browser tool) | `@playwright/mcp@0.0.85`, pinned in `.mcp.json` and the setup skill (2026-11-13) | Pre-1.0 and released often (about every 2 weeks); each release builds on an alpha Playwright | Check for a newer version, test it (`--help` starts, a LinkedIn search, one Easy Apply form), then move the pin in both files | Monthly ✅ |
+| Node.js minimum | The setup wizard requires Node 22+; the portable fallback downloads Node 26 LTS | Node 22 support ends 2027-04-30; Node 24 ends 2028-04-30; Node 26 ends 2029-04-30 | Before April 2027, raise the minimum to Node 24+ | 2027-03 ✅ |
 | Claude Code install commands | `install.ps1` / `install.sh` in the README | Can change | Check both commands still work on a clean machine | Every 3 months |
 | LinkedIn pages | Read and filled by the job-search skill | LinkedIn changes its pages without notice | Do a test search and open one Easy Apply form (never submit) | Monthly |
 | CV to PDF | `templates/cv-page.html`, printed with Edge or Chrome | Browsers update themselves | Build one CV PDF from the template and look at it | Every 3 months |
