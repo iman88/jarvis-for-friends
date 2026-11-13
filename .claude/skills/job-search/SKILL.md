@@ -21,6 +21,8 @@ Build a LinkedIn search from the profile:
 
 Logged-in search: `https://www.linkedin.com/jobs/search/?keywords=...&geoId=...&f_WT=2&f_TPR=r604800&sortBy=DD`.
 
+LinkedIn may open this on its newer page, `/jobs/search-results`. That page can drop `f_WT` and `sortBy` from the address, add a salary filter of its own (`f_SAL`), and show hybrid or on-site jobs even with Remote ticked. So check each job's work type yourself: keep a job only if its card or description says the type they want, such as "(Remote)". If the salary filter hides jobs they would want, remove it.
+
 To collect many results quickly, fetch from the logged-in page (about 1 request/second):
 - list: `/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=...&geoId=...&f_WT=2&f_TPR=r604800&start=N` (10 per page; split the HTML on `urn:li:jobPosting:` and regex out title, company, `job-search-card__location`, `datetime`). This endpoint ignores boolean operators, so it returns a broader list. Filter it yourself.
 - details: `/jobs-guest/jobs/api/jobPosting/<id>` (strip tags and read the whole text).
